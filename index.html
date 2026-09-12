@@ -2,90 +2,62 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=dev<!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8<!doctype html>
-<html lang="ja"><!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#111">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FIGHT TIMER">
-<meta name="description" content="シンプルで使いやすい格闘技用タイマー">
 <link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23111' width='192' height='192'/><text x='96' y='120' font-size='80' font-weight='900' fill='%23e8e8e8' text-anchor='middle' font-family='system-ui'>⏱</text></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23111' width='180' height='180' rx='39'/><text x='90' y='135' font-size='100' font-weight='900' fill='%23e8e8e8' text-anchor='middle' font-family='system-ui'>⏱</text></svg>">
 <title>FIGHT TIMER</title>
 <style>
-  :root{--bg:#101010;--panel:#1b1b1b;--text:#f4f4f4;--muted:#a7a7a7;--accent:#e8e8e8;--danger:#ff5a5a}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;min-height:100dvh}
-  
-  .screen{display:none}
-  .screen.active{display:flex;flex-direction:column;min-height:100vh}
-  
-  /* 設定画面 */
-  #settingsScreen{justify-content:flex-start;padding:20px 16px}
-  
-  .app-header{text-align:center;margin-bottom:32px;padding-top:20px}
-  .app-header h1{margin:0;letter-spacing:.16em;font-size:24px;font-weight:900}
-  
-  .settings-form{flex:1}
-  .form-group{margin-bottom:24px}
-  .form-group label{display:block;color:#ddd;font-size:13px;font-weight:700;margin-bottom:8px}
-  .form-group select{width:100%;background:#090909;color:white;border:1px solid #444;border-radius:10px;padding:14px;font-size:17px}
-  
-  .start-button{margin-top:auto;margin-bottom:20px;padding:20px 16px}
-  .start-button button{width:100%;border:0;border-radius:12px;padding:16px;font-size:18px;font-weight:900;background:#e8e8e8;color:#111;cursor:pointer}
-  .start-button button:disabled{opacity:.4}
-  
-  /* タイマー画面 */
-  #timerScreen{justify-content:center;align-items:center;padding:20px 16px}
-  
-  .timer-container{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;transition:background-color .3s ease}
-  
-  .timer-container.state-idle{background:linear-gradient(135deg, #ff9500 0%, #ff6b00 100%)}
-  .timer-container.state-round{background:linear-gradient(135deg, #ff3b30 0%, #cc2300 100%)}
-  .timer-container.state-interval{background:linear-gradient(135deg, #00a8e8 0%, #0080b0 100%)}
-  .timer-container.state-finished{background:linear-gradient(135deg, #5a5a5a 0%, #3a3a3a 100%)}
-  
-  .timer-phase{font-size:18px;font-weight:800;letter-spacing:.12em;min-height:28px;margin-bottom:16px;color:#ffffff;opacity:.9}
-  
-  .timer-round{font-size:32px;font-weight:900;margin-bottom:24px;letter-spacing:.04em;color:#ffffff;opacity:.9}
-  
-  .timer-display{font-variant-numeric:tabular-nums;font-size:clamp(100px,30vw,180px);font-weight:900;line-height:1;letter-spacing:.02em;margin:20px 0;color:#ffffff;text-shadow:0 4px 12px rgba(0,0,0,.3)}
-  
-  .timer-hint{font-size:16px;color:rgba(255,255,255,.8);min-height:24px;margin-top:16px}
-  
-  .timer-controls{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px;padding:0 16px}
-  .timer-controls button{border:0;border-radius:12px;padding:16px;font-size:16px;font-weight:900;cursor:pointer;background:rgba(255,255,255,.2);color:white;font-weight:900}
-  .timer-controls button:active{background:rgba(255,255,255,.4)}
-  
-  .timer-status{text-align:center;color:rgba(255,255,255,.7);font-size:12px;margin-top:16px}
-  
-  @media(max-width:500px){
-    .app-header{margin-bottom:24px}
-    .form-group{margin-bottom:18px}
-    .timer-display{font-size:clamp(80px,25vw,150px)}
-  }
+:root{--bg:#101010;--panel:#1b1b1b;--text:#f4f4f4;--muted:#a7a7a7}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+
+.screen{display:none;width:100%;height:100%;flex-direction:column;overflow:hidden}
+.screen.active{display:flex}
+
+#settingsScreen{justify-content:flex-start;padding:20px}
+#timerScreen{justify-content:center;align-items:center;padding:20px}
+
+.app-title{text-align:center;margin:40px 0 40px;font-size:28px;font-weight:900;letter-spacing:.1em}
+
+.settings-form{width:100%;max-width:600px;margin:0 auto}
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-size:13px;font-weight:700;margin-bottom:8px;color:#ddd}
+.form-select{width:100%;padding:14px;background:#090909;color:white;border:1px solid #444;border-radius:10px;font-size:16px}
+
+.start-btn-container{width:100%;max-width:600px;margin:auto;margin-top:40px}
+.start-btn{width:100%;padding:18px;background:#e8e8e8;color:#111;font-size:18px;font-weight:900;border:0;border-radius:12px;cursor:pointer}
+
+.timer-display-area{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;width:100%;transition:background-color .3s ease}
+
+.timer-display-area.state-idle{background:linear-gradient(135deg,#ff9500 0%,#ff6b00 100%)}
+.timer-display-area.state-round{background:linear-gradient(135deg,#ff3b30 0%,#cc2300 100%)}
+.timer-display-area.state-interval{background:linear-gradient(135deg,#00a8e8 0%,#0080b0 100%)}
+.timer-display-area.state-finished{background:linear-gradient(135deg,#5a5a5a 0%,#3a3a3a 100%)}
+
+.timer-phase{font-size:18px;font-weight:800;color:#ffffff;margin-bottom:10px}
+.timer-round{font-size:32px;font-weight:900;color:#ffffff;margin-bottom:20px}
+.timer-time{font-size:clamp(80px,25vw,150px);font-weight:900;color:#ffffff;line-height:1;text-shadow:0 4px 12px rgba(0,0,0,.3);margin:20px 0}
+.timer-hint{font-size:16px;color:rgba(255,255,255,.8);min-height:24px}
+
+.timer-controls{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:30px;padding:0 10px}
+.timer-btn{padding:16px;border:0;border-radius:12px;font-size:16px;font-weight:900;cursor:pointer;background:rgba(255,255,255,.2);color:white}
+.timer-btn:active{background:rgba(255,255,255,.4)}
+
+.timer-status{font-size:12px;color:rgba(255,255,255,.7);margin-top:10px}
 </style>
 </head>
 <body>
 
-<!-- 設定画面 -->
 <div id="settingsScreen" class="screen active">
-  <div class="app-header">
-    <h1>FIGHT TIMER</h1>
-  </div>
+  <div class="app-title">FIGHT TIMER</div>
   
   <div class="settings-form">
     <div class="form-group">
-      <label>ラウンド数</label>
-      <select id="rounds">
+      <label class="form-label">ラウンド数</label>
+      <select id="rounds" class="form-select">
         <option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option>
         <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
         <option>11</option><option>12</option><option>13</option><option>14</option><option>15</option>
@@ -94,1097 +66,194 @@
     </div>
     
     <div class="form-group">
-      <label>1ラウンド時間</label>
-      <select id="roundTime"></select>
+      <label class="form-label">1ラウンド時間</label>
+      <select id="roundTime" class="form-select"></select>
     </div>
     
     <div class="form-group">
-      <label>インターバル</label>
-      <select id="interval"></select>
+      <label class="form-label">インターバル</label>
+      <select id="interval" class="form-select"></select>
     </div>
     
     <div class="form-group">
-      <label>開始前アイドル</label>
-      <select id="idle"></select>
+      <label class="form-label">開始前アイドル</label>
+      <select id="idle" class="form-select"></select>
     </div>
   </div>
   
-  <div class="start-button">
-    <button id="startBtn">START</button>
+  <div class="start-btn-container">
+    <button id="startBtn" class="start-btn">START</button>
   </div>
 </div>
 
-<!-- タイマー画面 -->
 <div id="timerScreen" class="screen">
-  <div class="timer-container">
+  <div class="timer-display-area">
     <div class="timer-phase" id="phase">READY</div>
-    <div class="timer-round" id="round">ROUND 1 / 3</div>
-    <div class="timer-display" id="time">01:00</div>
-    <div class="timer-hint" id="hint">設定して START</div>
+    <div class="timer-round" id="round">ROUND 1/3</div>
+    <div class="timer-time" id="time">01:00</div>
+    <div class="timer-hint" id="hint">準備中</div>
     
     <div class="timer-controls">
-      <button class="stop-btn" id="stopBtn">STOP</button>
-      <button class="reset-btn" id="backBtn">RESET</button>
+      <button id="stopBtn" class="timer-btn">STOP</button>
+      <button id="resetBtn" class="timer-btn">RESET</button>
     </div>
     
-    <div class="timer-status" id="status">画面スリープ防止：準備中</div>
+    <div class="timer-status" id="status">準備中</div>
   </div>
 </div>
 
-<audio id="audioGong" preload="auto" src="bell.mp3"></audio>
-<audio id="audio30sec" preload="auto" src="30_seconds.mp3"></audio>
-<audio id="audio10sec" preload="auto" src="10_seconds.mp3"></audio>
+<audio id="audioGong" src="bell.mp3"></audio>
+<audio id="audio30sec" src="30_seconds.mp3"></audio>
+<audio id="audio10sec" src="10_seconds.mp3"></audio>
 
 <script>
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('service-worker.js').catch(err => {
-    console.log('Service Worker登録失敗:', err);
-  });
+  navigator.serviceWorker.register('service-worker.js').catch(()=>{});
 }
 </script>
 
 <script>
-(() => {
+(()=>{
   "use strict";
-
-  const $ = id => document.getElementById(id);
   
-  // 画面管理
-  const settingsScreen = $('settingsScreen');
-  const timerScreen = $('timerScreen');
+  const $=id=>document.getElementById(id);
   
-  // 設定画面のエレメント
-  const roundsSel = $('rounds');
-  const roundTimeSel = $('roundTime');
-  const intervalSel = $('interval');
-  const idleSel = $('idle');
-  const startBtn = $('startBtn');
+  const settingsScreen=$('settingsScreen');
+  const timerScreen=$('timerScreen');
   
-  // タイマー画面のエレメント
-  const phase = $('phase');
-  const roundEl = $('round');
-  const timeEl = $('time');
-  const hint = $('hint');
-  const status = $('status');
-  const stopBtn = $('stopBtn');
-  const backBtn = $('backBtn');
+  const roundsSel=$('rounds');
+  const roundTimeSel=$('roundTime');
+  const intervalSel=$('interval');
+  const idleSel=$('idle');
+  const startBtn=$('startBtn');
   
-  // タイマー状態
-  let timerId = null;
-  let endAt = 0;
-  let state = "ready";
-  let round = 1;
-  let totalRounds = 3;
-  let wakeLock = null;
-  let lastWhole = -1;
+  const phaseEl=$('phase');
+  const roundEl=$('round');
+  const timeEl=$('time');
+  const hintEl=$('hint');
+  const statusEl=$('status');
+  const stopBtn=$('stopBtn');
+  const resetBtn=$('resetBtn');
+  const displayArea=document.querySelector('.timer-display-area');
   
-  // 設定値の保存
-  let savedRoundTime = 180;
-  let savedInterval = 60;
-  let savedIdle = 10;
-
-  // ラウンド時間セレクトボックスを作成
-  roundTimeSel.innerHTML = "";
-  for(let m = 1; m <= 10; m++){
-    const o = document.createElement("option");
-    o.value = m * 60;
-    o.textContent = m + "分";
-    roundTimeSel.appendChild(o);
-  }
-  roundTimeSel.value = "180";
-
-  // インターバルセレクトボックスを作成
-  intervalSel.innerHTML = "";
-  for(let s = 0; s <= 60; s += 5){
-    const o = document.createElement("option");
-    o.value = s;
-    o.textContent = s + "秒";
-    intervalSel.appendChild(o);
-  }
-  intervalSel.value = "60";
-
-  // 開始前アイドルセレクトボックスを作成
-  idleSel.innerHTML = "";
-  for(let s = 0; s <= 30; s += 5){
-    const o = document.createElement("option");
-    o.value = s;
-    o.textContent = s + "秒";
-    idleSel.appendChild(o);
-  }
-  idleSel.value = "10";
-
-  function fmt(sec){
-    sec = Math.max(0, Math.ceil(sec));
-    return String(Math.floor(sec / 60)).padStart(2, "0") + ":" + String(sec % 60).padStart(2, "0");
-  }
-
-  function updateDisplay(sec){
-    timeEl.textContent = fmt(sec);
-    roundEl.textContent = `ROUND ${round} / ${totalRounds}`;
-  }
-
-  function playAudio(audioId){
-    try{
-      const audio = $(audioId);
-      if(!audio){
-        console.log('Audio element not found:', audioId);
-        return;
-      }
-      if(!audio.src){
-        console.log('Audio src not set:', audioId);
-        return;
-      }
-      audio.currentTime = 0;
-      const playPromise = audio.play();
-      if(playPromise !== undefined){
-        playPromise.catch(e => {
-          console.log('Audio playback failed for ' + audioId + ':', e.message);
-        });
-      }
-    }catch(e){
-      console.log('Error playing audio ' + audioId + ':', e);
-    }
-  }
-
-  function voiceNumber(word){
-    if("speechSynthesis" in window){
-      try{
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(word);
-        u.lang = "en-US";
-        u.rate = 0.9;
-        u.pitch = 1;
-        window.speechSynthesis.speak(u);
-        return;
-      }catch(e){}
-    }
-  }
-
-  async function enableWakeLock(){
-    if(!("wakeLock" in navigator)){
-      status.textContent = "画面スリープ防止：非対応ブラウザ";
-      return;
-    }
-    try{
-      if(wakeLock) await wakeLock.release().catch(()=>{});
-      wakeLock = await navigator.wakeLock.request("screen");
-      status.textContent = "画面スリープ防止：ON";
-      wakeLock.addEventListener("release", ()=>{ 
-        if(state !== "ready") status.textContent = "画面スリープ防止：再取得待ち"; 
-      });
-    }catch(e){
-      status.textContent = "画面スリープ防止：取得できませんでした";
-    }
-  }
-
-  document.addEventListener("visibilitychange", ()=>{
-    if(document.visibilityState === "visible" && state !== "ready") enableWakeLock();
-  });
-
-  function setPhase(next, seconds, message = ""){
-    state = next;
-    endAt = performance.now() + seconds * 1000;
-    lastWhole = Math.ceil(seconds);
-    phase.textContent = next === "idle" ? "GET READY" : next === "round" ? "ROUND" : next === "interval" ? "INTERVAL" : "READY";
-    hint.textContent = message;
-    updateDisplay(seconds);
-    
-    // 色を状態に応じて変更
-    const timerContainer = document.querySelector('.timer-container');
-    timerContainer.classList.remove('state-idle', 'state-round', 'state-interval', 'state-finished');
-    if(next === 'idle') timerContainer.classList.add('state-idle');
-    else if(next === 'round') timerContainer.classList.add('state-round');
-    else if(next === 'interval') timerContainer.classList.add('state-interval');
-  }
-
-  function stopTimer(){
-    if(timerId !== null) cancelAnimationFrame(timerId);
-    timerId = null;
-  }
-
-  function loop(){
-    if(state === "ready") return;
-    const seconds = Math.max(0, (endAt - performance.now()) / 1000);
-    const whole = Math.ceil(seconds);
-    updateDisplay(seconds);
-
-    if(state==="round"){
-      if(whole===30 && lastWhole>30){ 
-        console.log('Playing 30 seconds audio');
-        playAudio("audio30sec");
-      }
-      else if(whole===10 && lastWhole>10){ 
-        console.log('Playing 10 seconds audio');
-        playAudio("audio10sec");
-      }
-    }
-
-    if(state==="interval"){
-      if(whole===5 && lastWhole>5){ 
-        hint.textContent = "FIVE"; 
-        voiceNumber("five"); 
-      }
-      else if(whole===4 && lastWhole>4){ 
-        hint.textContent = "FOUR"; 
-        voiceNumber("four"); 
-      }
-      else if(whole===3 && lastWhole>3){ 
-        hint.textContent = "THREE"; 
-        voiceNumber("three"); 
-      }
-      else if(whole===2 && lastWhole>2){ 
-        hint.textContent = "TWO"; 
-        voiceNumber("two"); 
-      }
-      else if(whole===1 && lastWhole>1){ 
-        hint.textContent = "ONE"; 
-        voiceNumber("one"); 
-      }
-    }
-
-    lastWhole = whole;
-    if(seconds <= 0){
-      advance();
-      return;
-    }
-    timerId = requestAnimationFrame(loop);
-  }
-
-  function beginLoop(){
-    stopTimer();
-    timerId = requestAnimationFrame(loop);
-  }
-
-  function advance(){
-    stopTimer();
-
-    if(state === "idle"){
-      playAudio("audioGong");
-      setPhase("round", savedRoundTime, "FIGHT!");
-      beginLoop();
-      return;
-    }
-
-    if(state === "round"){
-      playAudio("audioGong");
-      if(round >= totalRounds){
-        finish();
-        return;
-      }
-      if(savedInterval <= 0){
-        round++;
-        playAudio("audioGong");
-        setPhase("round", savedRoundTime, "FIGHT!");
-        beginLoop();
-      }else{
-        setPhase("interval", savedInterval, "");
-        beginLoop();
-      }
-      return;
-    }
-
-    if(state === "interval"){
-      round++;
-      // 最終ラウンドの場合のみゴングを鳴らす
-      if(round === totalRounds){
-        playAudio("audioGong");
-      }
-      setPhase("round", savedRoundTime, "FIGHT!");
-      beginLoop();
-    }
-  }
-
-  function finish(){
-    stopTimer();
-    state = "ready";
-    phase.textContent = "FINISHED";
-    roundEl.textContent = `ROUND ${totalRounds} / ${totalRounds}`;
-    timeEl.textContent = "00:00";
-    hint.textContent = "お疲れさまでした";
-    if(wakeLock){ wakeLock.release().catch(()=>{}); wakeLock = null; }
-    status.textContent = "画面スリープ防止：OFF";
-    
-    // 色を終了状態に変更
-    const timerContainer = document.querySelector('.timer-container');
-    timerContainer.classList.remove('state-idle', 'state-round', 'state-interval');
-    timerContainer.classList.add('state-finished');
-  }
-
-  // START ボタン（設定画面）
-  startBtn.addEventListener("click", async()=>{
-    totalRounds = Number(roundsSel.value);
-    savedRoundTime = Number(roundTimeSel.value);
-    savedInterval = Number(intervalSel.value);
-    savedIdle = Number(idleSel.value);
-    
-    round = 1;
-    state = "ready";
-    lastWhole = -1;
-    
-    // 画面切り替え
-    settingsScreen.classList.remove('active');
-    timerScreen.classList.add('active');
-    
-    await enableWakeLock();
-
-    if(savedIdle > 0){
-      setPhase("idle", savedIdle, "開始まで");
-      beginLoop();
-    }else{
-      state = "idle";
-      advance();
-    }
-  });
-
-  // STOP ボタン（タイマー画面）
-  stopBtn.addEventListener("click", ()=>{
-    stopTimer();
-    finish();
-  });
-
-  // RESET ボタン（タイマー画面）
-  backBtn.addEventListener("click", ()=>{
-    stopTimer();
-    state = "ready";
-    round = 1;
-    phase.textContent = "READY";
-    roundEl.textContent = `ROUND 1 / ${totalRounds}`;
-    updateDisplay(savedRoundTime);
-    hint.textContent = "設定して START";
-    if(wakeLock){ wakeLock.release().catch(()=>{}); wakeLock = null; }
-    status.textContent = "画面スリープ防止：準備中";
-    
-    // 色をリセット
-    const timerContainer = document.querySelector('.timer-container');
-    timerContainer.classList.remove('state-idle', 'state-round', 'state-interval', 'state-finished');
-    
-    // 設定画面に戻る
-    timerScreen.classList.remove('active');
-    settingsScreen.classList.add('active');
-  });
-
-  roundsSel.addEventListener("change", ()=>{
-    totalRounds = Number(roundsSel.value);
-  });
-
-  roundTimeSel.addEventListener("change", ()=>{
-    updateDisplay(Number(roundTimeSel.value));
-  });
-
-  updateDisplay(Number(roundTimeSel.value));
-})();
-</script>
-</body>
-</html>
-
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="FIGHT TIMER">
-<meta name="description" content="シンプルで使いやすい格闘技用タイマー">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23111' width='192' height='192'/><text x='96' y='120' font-size='80' font-weight='900' fill='%23e8e8e8' text-anchor='middle' font-family='system-ui'>⏱</text></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23111' width='180' height='180' rx='39'/><text x='90' y='135' font-size='100' font-weight='900' fill='%23e8e8e8' text-anchor='middle' font-family='system-ui'>⏱</text></svg>">
-<title>FIGHT TIMER</title>
-<style>
-  :root{--bg:#101010;--panel:#1b1b1b;--text:#f4f4f4;--muted:#a7a7a7;--accent:#e8e8e8;--danger:#ff5a5a}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;min-height:100dvh}
-  
-  .screen{display:none}
-  .screen.active{display:flex;flex-direction:column;min-height:100vh}
-  
-  /* 設定画面 */
-  #settingsScreen{justify-content:flex-start;padding:20px 16px}
-  
-  .app-header{text-align:center;margin-bottom:32px;padding-top:20px}
-  .app-header h1{margin:0;letter-spacing:.16em;font-size:24px;font-weight:900}
-  
-  .settings-form{flex:1}
-  .form-group{margin-bottom:24px}
-  .form-group label{display:block;color:#ddd;font-size:13px;font-weight:700;margin-bottom:8px}
-  .form-group select{width:100%;background:#090909;color:white;border:1px solid #444;border-radius:10px;padding:14px;font-size:17px}
-  
-  .start-button{margin-top:auto;margin-bottom:20px;padding:20px 16px}
-  .start-button button{width:100%;border:0;border-radius:12px;padding:16px;font-size:18px;font-weight:900;background:#e8e8e8;color:#111;cursor:pointer}
-  .start-button button:disabled{opacity:.4}
-  
-  /* タイマー画面 */
-  #timerScreen{justify-content:center;align-items:center;padding:20px 16px}
-  
-  .timer-container{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;transition:background-color .3s ease}
-  
-  .timer-container.state-idle{background:linear-gradient(135deg, #ff9500 0%, #ff6b00 100%)}
-  .timer-container.state-round{background:linear-gradient(135deg, #ff3b30 0%, #cc2300 100%)}
-  .timer-container.state-interval{background:linear-gradient(135deg, #00a8e8 0%, #0080b0 100%)}
-  .timer-container.state-finished{background:linear-gradient(135deg, #5a5a5a 0%, #3a3a3a 100%)}
-  
-  .timer-phase{font-size:18px;font-weight:800;letter-spacing:.12em;min-height:28px;margin-bottom:16px;color:#ffffff;opacity:.9}
-  
-  .timer-round{font-size:32px;font-weight:900;margin-bottom:24px;letter-spacing:.04em;color:#ffffff;opacity:.9}
-  
-  .timer-display{font-variant-numeric:tabular-nums;font-size:clamp(100px,30vw,180px);font-weight:900;line-height:1;letter-spacing:.02em;margin:20px 0;color:#ffffff;text-shadow:0 4px 12px rgba(0,0,0,.3)}
-  
-  .timer-hint{font-size:16px;color:rgba(255,255,255,.8);min-height:24px;margin-top:16px}
-  
-  .timer-controls{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px;padding:0 16px}
-  .timer-controls button{border:0;border-radius:12px;padding:16px;font-size:16px;font-weight:900;cursor:pointer;background:rgba(255,255,255,.2);color:white;font-weight:900}
-  .timer-controls button:active{background:rgba(255,255,255,.4)}
-  
-  .timer-status{text-align:center;color:rgba(255,255,255,.7);font-size:12px;margin-top:16px}
-  
-  @media(max-width:500px){
-    .app-header{margin-bottom:24px}
-    .form-group{margin-bottom:18px}
-    .timer-display{font-size:clamp(80px,25vw,150px)}
-  }
-</style>
-</head>
-<body>
-
-<!-- 設定画面 -->
-<div id="settingsScreen" class="screen active">
-  <div class="app-header">
-    <h1>FIGHT TIMER</h1>
-  </div>
-  
-  <div class="settings-form">
-    <div class="form-group">
-      <label>ラウンド数</label>
-      <select id="rounds">
-        <option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option>
-        <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
-        <option>11</option><option>12</option><option>13</option><option>14</option><option>15</option>
-        <option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
-      </select>
-    </div>
-    
-    <div class="form-group">
-      <label>1ラウンド時間</label>
-      <select id="roundTime"></select>
-    </div>
-    
-    <div class="form-group">
-      <label>インターバル</label>
-      <select id="interval"></select>
-    </div>
-    
-    <div class="form-group">
-      <label>開始前アイドル</label>
-      <select id="idle"></select>
-    </div>
-  </div>
-  
-  <div class="start-button">
-    <button id="startBtn">START</button>
-  </div>
-</div>
-
-<!-- タイマー画面 -->
-<div id="timerScreen" class="screen">
-  <div class="timer-container">
-    <div class="timer-phase" id="phase">READY</div>
-    <div class="timer-round" id="round">ROUND 1 / 3</div>
-    <div class="timer-display" id="time">01:00</div>
-    <div class="timer-hint" id="hint">設定して START</div>
-    
-    <div class="timer-controls">
-      <button class="stop-btn" id="stopBtn">STOP</button>
-      <button class="reset-btn" id="backBtn">RESET</button>
-    </div>
-    
-    <div class="timer-status" id="status">画面スリープ防止：準備中</div>
-  </div>
-</div>
-
-<audio id="audioGong" preload="auto" src="bell.mp3"></audio>
-<audio id="audio30sec" preload="auto" src="30_seconds.mp3"></audio>
-<audio id="audio10sec" preload="auto" src="10_seconds.mp3"></audio>
-
-<script>
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('service-worker.js').catch(err => {
-    console.log('Service Worker登録失敗:', err);
-  });
-}
-</script>
-
-<script>
-(() => {
-  "use strict";
-
-  const $ = id => document.getElementById(id);
-  
-  // 画面管理
-  const settingsScreen = $('settingsScreen');
-  const timerScreen = $('timerScreen');
-  
-  // 設定画面のエレメント
-  const roundsSel = $('rounds');
-  const roundTimeSel = $('roundTime');
-  const intervalSel = $('interval');
-  const idleSel = $('idle');
-  const startBtn = $('startBtn');
-  
-  // タイマー画面のエレメント
-  const phase = $('phase');
-  const roundEl = $('round');
-  const timeEl = $('time');
-  const hint = $('hint');
-  const status = $('status');
-  const stopBtn = $('stopBtn');
-  const backBtn = $('backBtn');
-  
-  // タイマー状態
-  let timerId = null;
-  let endAt = 0;
-  let state = "ready";
-  let round = 1;
-  let totalRounds = 3;
-  let wakeLock = null;
-  let lastWhole = -1;
-  
-  // 設定値の保存
-  let savedRoundTime = 180;
-  let savedInterval = 60;
-  let savedIdle = 10;
-
-  // ラウンド時間セレクトボックスを作成
-  roundTimeSel.innerHTML = "";
-  for(let m = 1; m <= 10; m++){
-    const o = document.createElement("option");
-    o.value = m * 60;
-    o.textContent = m + "分";
-    roundTimeSel.appendChild(o);
-  }
-  roundTimeSel.value = "180";
-
-  // インターバルセレクトボックスを作成
-  intervalSel.innerHTML = "";
-  for(let s = 0; s <= 60; s += 5){
-    const o = document.createElement("option");
-    o.value = s;
-    o.textContent = s + "秒";
-    intervalSel.appendChild(o);
-  }
-  intervalSel.value = "60";
-
-  // 開始前アイドルセレクトボックスを作成
-  idleSel.innerHTML = "";
-  for(let s = 0; s <= 30; s += 5){
-    const o = document.createElement("option");
-    o.value = s;
-    o.textContent = s + "秒";
-    idleSel.appendChild(o);
-  }
-  idleSel.value = "10";
-
-  function fmt(sec){
-    sec = Math.max(0, Math.ceil(sec));
-    return String(Math.floor(sec / 60)).padStart(2, "0") + ":" + String(sec % 60).padStart(2, "0");
-  }
-
-  function updateDisplay(sec){
-    timeEl.textContent = fmt(sec);
-    roundEl.textContent = `ROUND ${round} / ${totalRounds}`;
-  }
-
-  function playAudio(audioId){
-    try{
-      const audio = $(audioId);
-      if(audio && audio.src){
-        audio.currentTime = 0;
-        audio.play().catch(e => {
-          console.log('Audio playback failed for ' + audioId + ':', e);
-        });
-      }
-    }catch(e){
-      console.log('Error playing audio:', e);
-    }
-  }
-
-  function voiceNumber(word){
-    if("speechSynthesis" in window){
-      try{
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(word);
-        u.lang = "en-US";
-        u.rate = 0.9;
-        u.pitch = 1;
-        window.speechSynthesis.speak(u);
-        return;
-      }catch(e){}
-    }
-  }
-
-  async function enableWakeLock(){
-    if(!("wakeLock" in navigator)){
-      status.textContent = "画面スリープ防止：非対応ブラウザ";
-      return;
-    }
-    try{
-      if(wakeLock) await wakeLock.release().catch(()=>{});
-      wakeLock = await navigator.wakeLock.request("screen");
-      status.textContent = "画面スリープ防止：ON";
-      wakeLock.addEventListener("release", ()=>{ 
-        if(state !== "ready") status.textContent = "画面スリープ防止：再取得待ち"; 
-      });
-    }catch(e){
-      status.textContent = "画面スリープ防止：取得できませんでした";
-    }
-  }
-
-  document.addEventListener("visibilitychange", ()=>{
-    if(document.visibilityState === "visible" && state !== "ready") enableWakeLock();
-  });
-
-  function setPhase(next, seconds, message = ""){
-    state = next;
-    endAt = performance.now() + seconds * 1000;
-    lastWhole = Math.ceil(seconds);
-    phase.textContent = next === "idle" ? "GET READY" : next === "round" ? "ROUND" : next === "interval" ? "INTERVAL" : "READY";
-    hint.textContent = message;
-    updateDisplay(seconds);
-    
-    // 色を状態に応じて変更
-    const timerContainer = document.querySelector('.timer-container');
-    timerContainer.classList.remove('state-idle', 'state-round', 'state-interval', 'state-finished');
-    if(next === 'idle') timerContainer.classList.add('state-idle');
-    else if(next === 'round') timerContainer.classList.add('state-round');
-    else if(next === 'interval') timerContainer.classList.add('state-interval');
-  }
-
-  function stopTimer(){
-    if(timerId !== null) cancelAnimationFrame(timerId);
-    timerId = null;
-  }
-
-  function loop(){
-    if(state === "ready") return;
-    const seconds = Math.max(0, (endAt - performance.now()) / 1000);
-    const whole = Math.ceil(seconds);
-    updateDisplay(seconds);
-
-    if(state === "interval"){
-      if(whole === 30 && lastWhole > 30){ 
-        playAudio("audio30sec");
-      }
-      else if(whole === 10 && lastWhole > 10){ 
-        playAudio("audio10sec");
-      }
-      else if(whole === 5 && lastWhole > 5){ hint.textContent = "FIVE"; voiceNumber("five"); }
-      else if(whole === 4 && lastWhole > 4){ hint.textContent = "FOUR"; voiceNumber("four"); }
-      else if(whole === 3 && lastWhole > 3){ hint.textContent = "THREE"; voiceNumber("three"); }
-      else if(whole === 2 && lastWhole > 2){ hint.textContent = "TWO"; voiceNumber("two"); }
-      else if(whole === 1 && lastWhole > 1){ hint.textContent = "ONE"; voiceNumber("one"); }
-    }
-
-    lastWhole = whole;
-    if(seconds <= 0){
-      advance();
-      return;
-    }
-    timerId = requestAnimationFrame(loop);
-  }
-
-  function beginLoop(){
-    stopTimer();
-    timerId = requestAnimationFrame(loop);
-  }
-
-  function advance(){
-    stopTimer();
-
-    if(state === "idle"){
-      playAudio("audioGong");
-      setPhase("round", savedRoundTime, "FIGHT!");
-      beginLoop();
-      return;
-    }
-
-    if(state === "round"){
-      playAudio("audioGong");
-      if(round >= totalRounds){
-        finish();
-        return;
-      }
-      if(savedInterval <= 0){
-        round++;
-        playAudio("audioGong");
-        setPhase("round", savedRoundTime, "FIGHT!");
-        beginLoop();
-      }else{
-        setPhase("interval", savedInterval, "");
-        beginLoop();
-      }
-      return;
-    }
-
-    if(state === "interval"){
-      round++;
-      playAudio("audioGong");
-      setPhase("round", savedRoundTime, "FIGHT!");
-      beginLoop();
-    }
-  }
-
-  function finish(){
-    stopTimer();
-    state = "ready";
-    phase.textContent = "FINISHED";
-    roundEl.textContent = `ROUND ${totalRounds} / ${totalRounds}`;
-    timeEl.textContent = "00:00";
-    hint.textContent = "お疲れさまでした";
-    if(wakeLock){ wakeLock.release().catch(()=>{}); wakeLock = null; }
-    status.textContent = "画面スリープ防止：OFF";
-    
-    // 色を終了状態に変更
-    const timerContainer = document.querySelector('.timer-container');
-    timerContainer.classList.remove('state-idle', 'state-round', 'state-interval');
-    timerContainer.classList.add('state-finished');
-  }
-
-  // START ボタン（設定画面）
-  startBtn.addEventListener("click", async()=>{
-    totalRounds = Number(roundsSel.value);
-    savedRoundTime = Number(roundTimeSel.value);
-    savedInterval = Number(intervalSel.value);
-    savedIdle = Number(idleSel.value);
-    
-    round = 1;
-    state = "ready";
-    lastWhole = -1;
-    
-    // 画面切り替え
-    settingsScreen.classList.remove('active');
-    timerScreen.classList.add('active');
-    
-    await enableWakeLock();
-
-    if(savedIdle > 0){
-      setPhase("idle", savedIdle, "開始まで");
-      beginLoop();
-    }else{
-      state = "idle";
-      advance();
-    }
-  });
-
-  // STOP ボタン（タイマー画面）
-  stopBtn.addEventListener("click", ()=>{
-    stopTimer();
-    finish();
-  });
-
-  // RESET ボタン（タイマー画面）
-  backBtn.addEventListener("click", ()=>{
-    stopTimer();
-    state = "ready";
-    round = 1;
-    phase.textContent = "READY";
-    roundEl.textContent = `ROUND 1 / ${totalRounds}`;
-    updateDisplay(savedRoundTime);
-    hint.textContent = "設定して START";
-    if(wakeLock){ wakeLock.release().catch(()=>{}); wakeLock = null; }
-    status.textContent = "画面スリープ防止：準備中";
-    
-    // 色をリセット
-    const timerContainer = document.querySelector('.timer-container');
-    timerContainer.classList.remove('state-idle', 'state-round', 'state-interval', 'state-finished');
-    
-    // 設定画面に戻る
-    timerScreen.classList.remove('active');
-    settingsScreen.classList.add('active');
-  });
-
-  roundsSel.addEventListener("change", ()=>{
-    totalRounds = Number(roundsSel.value);
-  });
-
-  roundTimeSel.addEventListener("change", ()=>{
-    updateDisplay(Number(roundTimeSel.value));
-  });
-
-  updateDisplay(Number(roundTimeSel.value));
-})();
-</script>
-</body>
-</html>
-">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="FIGHT TIMER">
-<meta name="description" content="シンプルで使いやすい格闘技用タイマー">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23111' width='192' height='192'/><text x='96' y='120' font-size='80' font-weight='900' fill='%23e8e8e8' text-anchor='middle' font-family='system-ui'>⏱</text></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23111' width='180' height='180' rx='39'/><text x='90' y='135' font-size='100' font-weight='900' fill='%23e8e8e8' text-anchor='middle' font-family='system-ui'>⏱</text></svg>">
-<title>FIGHT TIMER</title>
-<style>
-  :root{--bg:#101010;--panel:#1b1b1b;--text:#f4f4f4;--muted:#a7a7a7;--accent:#e8e8e8;--danger:#ff5a5a}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;min-height:100dvh}
-  .app{max-width:760px;margin:auto;padding:18px 16px 28px}
-  h1{margin:0 0 14px;text-align:center;letter-spacing:.16em;font-size:20px}
-  .display{background:#050505;border:1px solid #333;border-radius:18px;padding:18px 12px 20px;text-align:center;box-shadow:0 8px 30px #0008}
-  .phase{font-size:18px;font-weight:800;letter-spacing:.12em;min-height:28px}
-  .round{font-size:28px;font-weight:900;margin-top:4px}
-  .time{font-variant-numeric:tabular-nums;font-size:clamp(76px,22vw,150px);font-weight:900;line-height:.95;letter-spacing:.02em;margin:14px 0 10px}
-  .hint{font-size:14px;color:var(--muted);min-height:21px}
-  .controls{margin-top:16px;background:var(--panel);border-radius:16px;padding:16px}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  label{display:block;color:#ddd;font-size:13px;font-weight:700}
-  select{width:100%;margin-top:6px;background:#090909;color:white;border:1px solid #444;border-radius:10px;padding:12px;font-size:17px}
-  .buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-  button{border:0;border-radius:12px;padding:14px;font-size:17px;font-weight:900;background:#eee;color:#111}
-  button.secondary{background:#383838;color:white}
-  button:disabled{opacity:.4}
-  .status{text-align:center;color:var(--muted);font-size:12px;margin-top:12px}
-  .flash{position:fixed;inset:0;pointer-events:none;opacity:0;background:white;transition:opacity .08s}
-  .flash.on{opacity:.08}
-  @media(max-width:500px){.grid{grid-template-columns:1fr 1fr}.controls{padding:13px}.app{padding-top:12px}}
-</style>
-</head>
-<body>
-<div class="app">
-  <h1>FIGHT TIMER</h1>
-
-  <section class="display" aria-live="polite">
-    <div id="phase" class="phase">READY</div>
-    <div id="round" class="round">ROUND 1 / 3</div>
-    <div id="time" class="time">01:00</div>
-    <div id="hint" class="hint">設定して START</div>
-  </section>
-
-  <section class="controls">
-    <div class="grid">
-      <label>ラウンド数
-        <select id="rounds">
-          <option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option>
-          <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
-          <option>11</option><option>12</option><option>13</option><option>14</option><option>15</option>
-          <option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
-        </select>
-      </label>
-      <label>1ラウンド
-        <select id="roundTime"></select>
-      </label>
-      <label>インターバル
-        <select id="interval"></select>
-      </label>
-      <label>開始前アイドル
-        <select id="idle"></select>
-      </label>
-    </div>
-    <div class="buttons">
-      <button id="start">START</button>
-      <button id="reset" class="secondary">RESET</button>
-    </div>
-    <div id="status" class="status">画面スリープ防止：準備中</div>
-  </section>
-</div>
-<div id="flash" class="flash"></div>
-
-<!-- オーディオファイル -->
-<audio id="audioGong" preload="auto">
-  <source src="bell.mp3" type="audio/mpeg">
-</audio>
-<audio id="audio30sec" preload="auto">
-  <source src="30_seconds.mp3" type="audio/mpeg">
-</audio>
-<audio id="audio10sec" preload="auto">
-  <source src="10_seconds.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-  // Service Worker登録
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js').catch(err => {
-      console.log('Service Worker登録失敗:', err);
-    });
-  }
-</script>
-
-<script>
-(() => {
-  "use strict";
-
-  const $ = id => document.getElementById(id);
-  const phase=$("phase"), roundEl=$("round"), timeEl=$("time"), hint=$("hint"), status=$("status");
-  const roundsSel=$("rounds"), roundTimeSel=$("roundTime"), intervalSel=$("interval"), idleSel=$("idle");
-  const startBtn=$("start"), resetBtn=$("reset");
-
-  let timerId=null, endAt=0, state="ready", round=1, totalRounds=3;
-  let wakeLock=null, audioCtx=null;
+  let timerId=null;
+  let endAt=0;
+  let state='ready';
+  let round=1;
+  let totalRounds=3;
+  let wakeLock=null;
   let lastWhole=-1;
-
-  // Populate settings.
-  roundTimeSel.innerHTML="";
-  for(let m=1;m<=10;m++){
-    const o=document.createElement("option");
-    o.value=m*60; o.textContent=m+"分"; roundTimeSel.appendChild(o);
+  
+  let savedRoundTime=180;
+  let savedInterval=60;
+  let savedIdle=10;
+  
+  function initSelects(){
+    roundTimeSel.innerHTML='';
+    for(let m=1;m<=10;m++){
+      const o=document.createElement('option');
+      o.value=m*60;
+      o.textContent=m+'分';
+      roundTimeSel.appendChild(o);
+    }
+    roundTimeSel.value='180';
+    
+    intervalSel.innerHTML='';
+    for(let s=0;s<=60;s+=5){
+      const o=document.createElement('option');
+      o.value=s;
+      o.textContent=s+'秒';
+      intervalSel.appendChild(o);
+    }
+    intervalSel.value='60';
+    
+    idleSel.innerHTML='';
+    for(let s=0;s<=30;s+=5){
+      const o=document.createElement('option');
+      o.value=s;
+      o.textContent=s+'秒';
+      idleSel.appendChild(o);
+    }
+    idleSel.value='10';
   }
-  roundTimeSel.value="3";
-
-  intervalSel.innerHTML="";
-  for(let s=0;s<=60;s+=5){
-    const o=document.createElement("option");
-    o.value=s; o.textContent=s+"秒"; intervalSel.appendChild(o);
-  }
-  intervalSel.value="60";
-
-  idleSel.innerHTML="";
-  for(let s=0;s<=30;s+=5){
-    const o=document.createElement("option");
-    o.value=s; o.textContent=s+"秒"; idleSel.appendChild(o);
-  }
-  idleSel.value="10";
-
+  
   function fmt(sec){
     sec=Math.max(0,Math.ceil(sec));
-    return String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0");
+    return String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');
   }
-
+  
   function updateDisplay(sec){
     timeEl.textContent=fmt(sec);
-    roundEl.textContent=`ROUND ${round} / ${totalRounds}`;
+    roundEl.textContent=`ROUND ${round}/${totalRounds}`;
   }
-
-  function audioReady(){
+  
+  function playAudio(id){
     try{
-      if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-      if(audioCtx.state==="suspended") audioCtx.resume();
-      return true;
-    }catch(e){ return false; }
+      const audio=$(id);
+      if(!audio) return;
+      audio.currentTime=0;
+      audio.play().catch(()=>{});
+    }catch(e){}
   }
-
-  function beep(freq,duration,volume,delay=0){
-    if(!audioReady()) return;
-    const t=audioCtx.currentTime+delay;
-    const osc=audioCtx.createOscillator();
-    const gain=audioCtx.createGain();
-    osc.type="sine";
-    osc.frequency.setValueAtTime(freq,t);
-    gain.gain.setValueAtTime(0.0001,t);
-    gain.gain.exponentialRampToValueAtTime(volume,t+0.012);
-    gain.gain.exponentialRampToValueAtTime(0.0001,t+duration);
-    osc.connect(gain).connect(audioCtx.destination);
-    osc.start(t);
-    osc.stop(t+duration+0.03);
-  }
-
-  function gong(){
-    // Play bell.mp3
-    const audio = document.getElementById('audioGong');
-    if(audio){
-      audio.currentTime = 0;
-      audio.play().catch(e => {
-        // フォールバック：再生失敗時は何もしない
-        console.log('Audio playback failed:', e);
-      });
-    }
-  }
-
-  function clack(){
-    // Dry wooden-clapper approximation using a short noise burst.
-    if(!audioReady()) return;
-    const sr=audioCtx.sampleRate, len=Math.floor(sr*0.13);
-    const buf=audioCtx.createBuffer(1,len,sr);
-    const data=buf.getChannelData(0);
-    for(let i=0;i<len;i++) data[i]=(Math.random()*2-1)*Math.exp(-i/(sr*0.018));
-    const src=audioCtx.createBufferSource();
-    const filter=audioCtx.createBiquadFilter();
-    const gain=audioCtx.createGain();
-    filter.type="bandpass"; filter.frequency.value=1500; filter.Q.value=.7;
-    gain.gain.value=.9;
-    src.buffer=buf; src.connect(filter).connect(gain).connect(audioCtx.destination);
-    src.start();
-  }
-
+  
   function voiceNumber(word){
-    // Uses speech synthesis when available; falls back to a beep.
-    if("speechSynthesis" in window){
+    if('speechSynthesis' in window){
       try{
         window.speechSynthesis.cancel();
         const u=new SpeechSynthesisUtterance(word);
-        u.lang="en-US"; u.rate=.9; u.pitch=1;
+        u.lang='en-US';
+        u.rate=0.9;
         window.speechSynthesis.speak(u);
-        return;
       }catch(e){}
     }
-    beep(700,.16,.3);
   }
-
+  
   async function enableWakeLock(){
-    if(!("wakeLock" in navigator)){
-      status.textContent="画面スリープ防止：非対応ブラウザ";
-      return;
-    }
+    if(!('wakeLock' in navigator)) return;
     try{
       if(wakeLock) await wakeLock.release().catch(()=>{});
-      wakeLock=await navigator.wakeLock.request("screen");
-      status.textContent="画面スリープ防止：ON";
-      wakeLock.addEventListener("release",()=>{ if(state!=="ready") status.textContent="画面スリープ防止：再取得待ち"; });
-    }catch(e){
-      status.textContent="画面スリープ防止：取得できませんでした";
-    }
+      wakeLock=await navigator.wakeLock.request('screen');
+    }catch(e){}
   }
-
-  document.addEventListener("visibilitychange",()=>{
-    if(document.visibilityState==="visible" && state!=="ready") enableWakeLock();
-  });
-
-  function setPhase(next,seconds,message=""){
+  
+  function setPhase(next,seconds,message=''){
     state=next;
     endAt=performance.now()+seconds*1000;
     lastWhole=Math.ceil(seconds);
-    phase.textContent=next==="idle"?"GET READY":next==="round"?"ROUND":next==="interval"?"INTERVAL":"READY";
-    hint.textContent=message;
+    
+    phaseEl.textContent=next==='idle'?'GET READY':next==='round'?'ROUND':next==='interval'?'INTERVAL':'READY';
+    hintEl.textContent=message;
     updateDisplay(seconds);
+    
+    displayArea.classList.remove('state-idle','state-round','state-interval','state-finished');
+    if(next==='idle') displayArea.classList.add('state-idle');
+    else if(next==='round') displayArea.classList.add('state-round');
+    else if(next==='interval') displayArea.classList.add('state-interval');
   }
-
+  
   function stopTimer(){
     if(timerId!==null) cancelAnimationFrame(timerId);
     timerId=null;
   }
-
+  
   function loop(){
-    if(state==="ready") return;
     const seconds=Math.max(0,(endAt-performance.now())/1000);
     const whole=Math.ceil(seconds);
     updateDisplay(seconds);
-
-    if(state==="round" && whole===10 && lastWhole>10){
-      clack();
-      setTimeout(clack,350);
+    
+    if(state==='round'){
+      if(whole===30&&lastWhole>30) playAudio('audio30sec');
+      else if(whole===10&&lastWhole>10) playAudio('audio10sec');
     }
-
-    if(state==="interval"){
-      if(whole===30 && lastWhole>30){ 
-        const audio30 = document.getElementById('audio30sec');
-        if(audio30){
-          audio30.currentTime = 0;
-          audio30.play().catch(e => console.log('Audio playback failed:', e));
-        }
-      }
-      else if(whole===10 && lastWhole>10){ 
-        const audio10 = document.getElementById('audio10sec');
-        if(audio10){
-          audio10.currentTime = 0;
-          audio10.play().catch(e => console.log('Audio playback failed:', e));
-        }
-      }
-      else if(whole===5 && lastWhole>5){ hint.textContent="FIVE"; voiceNumber("five"); }
-      else if(whole===4 && lastWhole>4){ hint.textContent="FOUR"; voiceNumber("four"); }
-      else if(whole===3 && lastWhole>3){ hint.textContent="THREE"; voiceNumber("three"); }
-      else if(whole===2 && lastWhole>2){ hint.textContent="TWO"; voiceNumber("two"); }
-      else if(whole===1 && lastWhole>1){ hint.textContent="ONE"; voiceNumber("one"); }
+    
+    if(state==='interval'){
+      if(whole===5&&lastWhole>5){ hintEl.textContent='FIVE'; voiceNumber('five'); }
+      else if(whole===4&&lastWhole>4){ hintEl.textContent='FOUR'; voiceNumber('four'); }
+      else if(whole===3&&lastWhole>3){ hintEl.textContent='THREE'; voiceNumber('three'); }
+      else if(whole===2&&lastWhole>2){ hintEl.textContent='TWO'; voiceNumber('two'); }
+      else if(whole===1&&lastWhole>1){ hintEl.textContent='ONE'; voiceNumber('one'); }
     }
-
+    
     lastWhole=whole;
     if(seconds<=0){
       advance();
@@ -1192,453 +261,100 @@ if('serviceWorker' in navigator){
     }
     timerId=requestAnimationFrame(loop);
   }
-
-  function beginLoop(){
-    stopTimer();
-    timerId=requestAnimationFrame(loop);
-  }
-
+  
   function advance(){
     stopTimer();
-
-    if(state==="idle"){
-      gong();
-      setPhase("round",Number(roundTimeSel.value),"FIGHT!");
-      beginLoop();
+    
+    if(state==='idle'){
+      playAudio('audioGong');
+      setPhase('round',savedRoundTime,'FIGHT!');
+      timerId=requestAnimationFrame(loop);
       return;
     }
-
-    if(state==="round"){
-      gong();
+    
+    if(state==='round'){
+      playAudio('audioGong');
       if(round>=totalRounds){
-        finish();
+        state='ready';
+        phaseEl.textContent='FINISHED';
+        roundEl.textContent=`ROUND ${totalRounds}/${totalRounds}`;
+        timeEl.textContent='00:00';
+        hintEl.textContent='お疲れさまでした';
+        displayArea.classList.remove('state-idle','state-round','state-interval');
+        displayArea.classList.add('state-finished');
+        if(wakeLock){ wakeLock.release().catch(()=>{}); wakeLock=null; }
         return;
       }
-      const rest=Number(intervalSel.value);
-      if(rest<=0){
+      if(savedInterval<=0){
         round++;
-        gong();
-        setPhase("round",Number(roundTimeSel.value),"FIGHT!");
-        beginLoop();
+        playAudio('audioGong');
+        setPhase('round',savedRoundTime,'FIGHT!');
+        timerId=requestAnimationFrame(loop);
       }else{
-        setPhase("interval",rest,"");
-        beginLoop();
+        setPhase('interval',savedInterval,'');
+        timerId=requestAnimationFrame(loop);
       }
       return;
     }
-
-    if(state==="interval"){
+    
+    if(state==='interval'){
       round++;
-      gong();
-      setPhase("round",Number(roundTimeSel.value),"FIGHT!");
-      beginLoop();
+      if(round===totalRounds) playAudio('audioGong');
+      setPhase('round',savedRoundTime,'FIGHT!');
+      timerId=requestAnimationFrame(loop);
     }
   }
-
-  function finish(){
-    stopTimer();
-    state="ready";
-    phase.textContent="FINISHED";
-    roundEl.textContent=`ROUND ${totalRounds} / ${totalRounds}`;
-    timeEl.textContent="00:00";
-    hint.textContent="お疲れさまでした";
-    startBtn.disabled=false;
-    if(wakeLock){ wakeLock.release().catch(()=>{}); wakeLock=null; }
-    status.textContent="画面スリープ防止：OFF";
-  }
-
-  startBtn.addEventListener("click",async()=>{
-    audioReady();
+  
+  startBtn.addEventListener('click',async()=>{
     totalRounds=Number(roundsSel.value);
+    savedRoundTime=Number(roundTimeSel.value);
+    savedInterval=Number(intervalSel.value);
+    savedIdle=Number(idleSel.value);
+    
     round=1;
-    startBtn.disabled=true;
+    state='ready';
+    lastWhole=-1;
+    
+    settingsScreen.classList.remove('active');
+    timerScreen.classList.add('active');
+    
     await enableWakeLock();
-
-    const idle=Number(idleSel.value);
-    if(idle>0){
-      setPhase("idle",idle,"開始まで");
-      beginLoop();
+    
+    if(savedIdle>0){
+      setPhase('idle',savedIdle,'開始まで');
+      timerId=requestAnimationFrame(loop);
     }else{
-      state="idle";
+      state='idle';
       advance();
     }
   });
-
-  resetBtn.addEventListener("click",()=>{
+  
+  stopBtn.addEventListener('click',()=>{
     stopTimer();
-    state="ready";
+    state='ready';
+    phaseEl.textContent='FINISHED';
+    roundEl.textContent=`ROUND ${totalRounds}/${totalRounds}`;
+    timeEl.textContent='00:00';
+    hintEl.textContent='中止しました';
+    displayArea.classList.remove('state-idle','state-round','state-interval');
+    displayArea.classList.add('state-finished');
+  });
+  
+  resetBtn.addEventListener('click',()=>{
+    stopTimer();
+    state='ready';
     round=1;
-    totalRounds=Number(roundsSel.value);
-    startBtn.disabled=false;
-    phase.textContent="READY";
-    roundEl.textContent=`ROUND 1 / ${totalRounds}`;
-    updateDisplay(Number(roundTimeSel.value));
-    hint.textContent="設定して START";
-    if(wakeLock){ wakeLock.release().catch(()=>{}); wakeLock=null; }
-    status.textContent="画面スリープ防止：準備中";
+    phaseEl.textContent='READY';
+    roundEl.textContent=`ROUND 1/${totalRounds}`;
+    updateDisplay(savedRoundTime);
+    hintEl.textContent='';
+    displayArea.classList.remove('state-idle','state-round','state-interval','state-finished');
+    
+    timerScreen.classList.remove('active');
+    settingsScreen.classList.add('active');
   });
-
-  roundsSel.addEventListener("change",()=>{
-    if(state==="ready"){
-      totalRounds=Number(roundsSel.value);
-      roundEl.textContent=`ROUND 1 / ${totalRounds}`;
-    }
-  });
-
-  roundTimeSel.addEventListener("change",()=>{
-    if(state==="ready") updateDisplay(Number(roundTimeSel.value));
-  });
-
-  updateDisplay(Number(roundTimeSel.value));
-})();
-</script>
-</body>
-</html>
-ice-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="FIGHT TIMER">
-<meta name="description" content="シンプルで使いやすい格闘技用タイマー">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23111' width='192' height='192'/><text x='96' y='120' font-size='80' font-weight='900' fill='%23e8e8e8' text-anchor='middle' font-family='system-ui'>⏱</text></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23111' width='180' height='180' rx='39'/><text x='90' y='135' font-size='100' font-weight='900' fill='%23e8e8e8' text-anchor='middle' font-family='system-ui'>⏱</text></svg>">
-<title>FIGHT TIMER</title>
-<style>
-  :root{--bg:#101010;--panel:#1b1b1b;--text:#f4f4f4;--muted:#a7a7a7;--accent:#e8e8e8;--danger:#ff5a5a}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;min-height:100dvh}
-  .app{max-width:760px;margin:auto;padding:18px 16px 28px}
-  h1{margin:0 0 14px;text-align:center;letter-spacing:.16em;font-size:20px}
-  .display{background:#050505;border:1px solid #333;border-radius:18px;padding:18px 12px 20px;text-align:center;box-shadow:0 8px 30px #0008}
-  .phase{font-size:18px;font-weight:800;letter-spacing:.12em;min-height:28px}
-  .round{font-size:28px;font-weight:900;margin-top:4px}
-  .time{font-variant-numeric:tabular-nums;font-size:clamp(76px,22vw,150px);font-weight:900;line-height:.95;letter-spacing:.02em;margin:14px 0 10px}
-  .hint{font-size:14px;color:var(--muted);min-height:21px}
-  .controls{margin-top:16px;background:var(--panel);border-radius:16px;padding:16px}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  label{display:block;color:#ddd;font-size:13px;font-weight:700}
-  select{width:100%;margin-top:6px;background:#090909;color:white;border:1px solid #444;border-radius:10px;padding:12px;font-size:17px}
-  .buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-  button{border:0;border-radius:12px;padding:14px;font-size:17px;font-weight:900;background:#eee;color:#111}
-  button.secondary{background:#383838;color:white}
-  button:disabled{opacity:.4}
-  .status{text-align:center;color:var(--muted);font-size:12px;margin-top:12px}
-  .flash{position:fixed;inset:0;pointer-events:none;opacity:0;background:white;transition:opacity .08s}
-  .flash.on{opacity:.08}
-  @media(max-width:500px){.grid{grid-template-columns:1fr 1fr}.controls{padding:13px}.app{padding-top:12px}}
-</style>
-</head>
-<body>
-<div class="app">
-  <h1>FIGHT TIMER</h1>
-
-  <section class="display" aria-live="polite">
-    <div id="phase" class="phase">READY</div>
-    <div id="round" class="round">ROUND 1 / 3</div>
-    <div id="time" class="time">01:00</div>
-    <div id="hint" class="hint">設定して START</div>
-  </section>
-
-  <section class="controls">
-    <div class="grid">
-      <label>ラウンド数
-        <select id="rounds">
-          <option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option>
-          <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
-          <option>11</option><option>12</option><option>13</option><option>14</option><option>15</option>
-          <option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
-        </select>
-      </label>
-      <label>1ラウンド
-        <select id="roundTime"></select>
-      </label>
-      <label>インターバル
-        <select id="interval"></select>
-      </label>
-      <label>開始前アイドル
-        <select id="idle"></select>
-      </label>
-    </div>
-    <div class="buttons">
-      <button id="start">START</button>
-      <button id="reset" class="secondary">RESET</button>
-    </div>
-    <div id="status" class="status">画面スリープ防止：準備中</div>
-  </section>
-</div>
-<div id="flash" class="flash"></div>
-
-<script>
-  // Service Worker登録
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js').catch(err => {
-      console.log('Service Worker登録失敗:', err);
-    });
-  }
-</script>
-
-<script>
-(() => {
-  "use strict";
-
-  const $ = id => document.getElementById(id);
-  const phase=$("phase"), roundEl=$("round"), timeEl=$("time"), hint=$("hint"), status=$("status");
-  const roundsSel=$("rounds"), roundTimeSel=$("roundTime"), intervalSel=$("interval"), idleSel=$("idle");
-  const startBtn=$("start"), resetBtn=$("reset");
-
-  let timerId=null, endAt=0, state="ready", round=1, totalRounds=3;
-  let wakeLock=null, audioCtx=null;
-  let lastWhole=-1;
-
-  // Populate settings.
-  roundTimeSel.innerHTML="";
-  for(let m=1;m<=10;m++){
-    const o=document.createElement("option");
-    o.value=m*60; o.textContent=m+"分"; roundTimeSel.appendChild(o);
-  }
-  roundTimeSel.value="3";
-
-  intervalSel.innerHTML="";
-  for(let s=0;s<=60;s+=5){
-    const o=document.createElement("option");
-    o.value=s; o.textContent=s+"秒"; intervalSel.appendChild(o);
-  }
-  intervalSel.value="60";
-
-  idleSel.innerHTML="";
-  for(let s=0;s<=30;s+=5){
-    const o=document.createElement("option");
-    o.value=s; o.textContent=s+"秒"; idleSel.appendChild(o);
-  }
-  idleSel.value="10";
-
-  function fmt(sec){
-    sec=Math.max(0,Math.ceil(sec));
-    return String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0");
-  }
-
-  function updateDisplay(sec){
-    timeEl.textContent=fmt(sec);
-    roundEl.textContent=`ROUND ${round} / ${totalRounds}`;
-  }
-
-  function audioReady(){
-    try{
-      if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-      if(audioCtx.state==="suspended") audioCtx.resume();
-      return true;
-    }catch(e){ return false; }
-  }
-
-  function beep(freq,duration,volume,delay=0){
-    if(!audioReady()) return;
-    const t=audioCtx.currentTime+delay;
-    const osc=audioCtx.createOscillator();
-    const gain=audioCtx.createGain();
-    osc.type="sine";
-    osc.frequency.setValueAtTime(freq,t);
-    gain.gain.setValueAtTime(0.0001,t);
-    gain.gain.exponentialRampToValueAtTime(volume,t+0.012);
-    gain.gain.exponentialRampToValueAtTime(0.0001,t+duration);
-    osc.connect(gain).connect(audioCtx.destination);
-    osc.start(t);
-    osc.stop(t+duration+0.03);
-  }
-
-  function gong(){
-    // Layered synthetic gong.
-    beep(185,1.15,0.42,0);
-    beep(277,1.05,0.20,0.015);
-    beep(370,0.90,0.12,0.03);
-  }
-
-  function clack(){
-    // Dry wooden-clapper approximation using a short noise burst.
-    if(!audioReady()) return;
-    const sr=audioCtx.sampleRate, len=Math.floor(sr*0.13);
-    const buf=audioCtx.createBuffer(1,len,sr);
-    const data=buf.getChannelData(0);
-    for(let i=0;i<len;i++) data[i]=(Math.random()*2-1)*Math.exp(-i/(sr*0.018));
-    const src=audioCtx.createBufferSource();
-    const filter=audioCtx.createBiquadFilter();
-    const gain=audioCtx.createGain();
-    filter.type="bandpass"; filter.frequency.value=1500; filter.Q.value=.7;
-    gain.gain.value=.9;
-    src.buffer=buf; src.connect(filter).connect(gain).connect(audioCtx.destination);
-    src.start();
-  }
-
-  function voiceNumber(word){
-    // Uses speech synthesis when available; falls back to a beep.
-    if("speechSynthesis" in window){
-      try{
-        window.speechSynthesis.cancel();
-        const u=new SpeechSynthesisUtterance(word);
-        u.lang="en-US"; u.rate=.9; u.pitch=1;
-        window.speechSynthesis.speak(u);
-        return;
-      }catch(e){}
-    }
-    beep(700,.16,.3);
-  }
-
-  async function enableWakeLock(){
-    if(!("wakeLock" in navigator)){
-      status.textContent="画面スリープ防止：非対応ブラウザ";
-      return;
-    }
-    try{
-      if(wakeLock) await wakeLock.release().catch(()=>{});
-      wakeLock=await navigator.wakeLock.request("screen");
-      status.textContent="画面スリープ防止：ON";
-      wakeLock.addEventListener("release",()=>{ if(state!=="ready") status.textContent="画面スリープ防止：再取得待ち"; });
-    }catch(e){
-      status.textContent="画面スリープ防止：取得できませんでした";
-    }
-  }
-
-  document.addEventListener("visibilitychange",()=>{
-    if(document.visibilityState==="visible" && state!=="ready") enableWakeLock();
-  });
-
-  function setPhase(next,seconds,message=""){
-    state=next;
-    endAt=performance.now()+seconds*1000;
-    lastWhole=Math.ceil(seconds);
-    phase.textContent=next==="idle"?"GET READY":next==="round"?"ROUND":next==="interval"?"INTERVAL":"READY";
-    hint.textContent=message;
-    updateDisplay(seconds);
-  }
-
-  function stopTimer(){
-    if(timerId!==null) cancelAnimationFrame(timerId);
-    timerId=null;
-  }
-
-  function loop(){
-    if(state==="ready") return;
-    const seconds=Math.max(0,(endAt-performance.now())/1000);
-    const whole=Math.ceil(seconds);
-    updateDisplay(seconds);
-
-    if(state==="round" && whole===10 && lastWhole>10){
-      clack();
-      setTimeout(clack,350);
-    }
-
-    if(state==="interval"){
-      if(whole===5 && lastWhole>5){ hint.textContent="FIVE"; voiceNumber("five"); }
-      else if(whole===4 && lastWhole>4){ hint.textContent="FOUR"; voiceNumber("four"); }
-      else if(whole===3 && lastWhole>3){ hint.textContent="THREE"; voiceNumber("three"); }
-      else if(whole===2 && lastWhole>2){ hint.textContent="TWO"; voiceNumber("two"); }
-      else if(whole===1 && lastWhole>1){ hint.textContent="ONE"; voiceNumber("one"); }
-    }
-
-    lastWhole=whole;
-    if(seconds<=0){
-      advance();
-      return;
-    }
-    timerId=requestAnimationFrame(loop);
-  }
-
-  function beginLoop(){
-    stopTimer();
-    timerId=requestAnimationFrame(loop);
-  }
-
-  function advance(){
-    stopTimer();
-
-    if(state==="idle"){
-      gong();
-      setPhase("round",Number(roundTimeSel.value),"FIGHT!");
-      beginLoop();
-      return;
-    }
-
-    if(state==="round"){
-      gong();
-      if(round>=totalRounds){
-        finish();
-        return;
-      }
-      const rest=Number(intervalSel.value);
-      if(rest<=0){
-        round++;
-        gong();
-        setPhase("round",Number(roundTimeSel.value),"FIGHT!");
-        beginLoop();
-      }else{
-        setPhase("interval",rest,"");
-        beginLoop();
-      }
-      return;
-    }
-
-    if(state==="interval"){
-      round++;
-      gong();
-      setPhase("round",Number(roundTimeSel.value),"FIGHT!");
-      beginLoop();
-    }
-  }
-
-  function finish(){
-    stopTimer();
-    state="ready";
-    phase.textContent="FINISHED";
-    roundEl.textContent=`ROUND ${totalRounds} / ${totalRounds}`;
-    timeEl.textContent="00:00";
-    hint.textContent="お疲れさまでした";
-    startBtn.disabled=false;
-    if(wakeLock){ wakeLock.release().catch(()=>{}); wakeLock=null; }
-    status.textContent="画面スリープ防止：OFF";
-  }
-
-  startBtn.addEventListener("click",async()=>{
-    audioReady();
-    totalRounds=Number(roundsSel.value);
-    round=1;
-    startBtn.disabled=true;
-    await enableWakeLock();
-
-    const idle=Number(idleSel.value);
-    if(idle>0){
-      setPhase("idle",idle,"開始まで");
-      beginLoop();
-    }else{
-      state="idle";
-      advance();
-    }
-  });
-
-  resetBtn.addEventListener("click",()=>{
-    stopTimer();
-    state="ready";
-    round=1;
-    totalRounds=Number(roundsSel.value);
-    startBtn.disabled=false;
-    phase.textContent="READY";
-    roundEl.textContent=`ROUND 1 / ${totalRounds}`;
-    updateDisplay(Number(roundTimeSel.value));
-    hint.textContent="設定して START";
-    if(wakeLock){ wakeLock.release().catch(()=>{}); wakeLock=null; }
-    status.textContent="画面スリープ防止：準備中";
-  });
-
-  roundsSel.addEventListener("change",()=>{
-    if(state==="ready"){
-      totalRounds=Number(roundsSel.value);
-      roundEl.textContent=`ROUND 1 / ${totalRounds}`;
-    }
-  });
-
-  roundTimeSel.addEventListener("change",()=>{
-    if(state==="ready") updateDisplay(Number(roundTimeSel.value));
-  });
-
+  
+  initSelects();
   updateDisplay(Number(roundTimeSel.value));
 })();
 </script>
