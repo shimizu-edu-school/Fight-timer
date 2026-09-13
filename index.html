@@ -279,9 +279,7 @@ if('serviceWorker' in navigator){
     stopTimer();
     
     if(state==='idle'){
-      playGong();
-      setPhase('round',savedRoundTime,'FIGHT!');
-      timerId=requestAnimationFrame(loop);
+      startRound();
       return;
     }
     
@@ -300,9 +298,7 @@ if('serviceWorker' in navigator){
       }
       if(savedInterval<=0){
         round++;
-        playGong();
-        setPhase('round',savedRoundTime,'FIGHT!');
-        timerId=requestAnimationFrame(loop);
+        startRound();
       }else{
         setPhase('interval',savedInterval,'');
         timerId=requestAnimationFrame(loop);
@@ -312,32 +308,42 @@ if('serviceWorker' in navigator){
     
     if(state==='interval'){
       round++;
-      setPhase('round',savedRoundTime,'FIGHT!');
-      timerId=requestAnimationFrame(loop);
+      startRound();
     }
   }
   
-  async function unlockAudio(){
-    const ids=['audioGong','audio30sec','audio10sec'];
-    for(const id of ids){
+  function startRound(){
+    playGong();
+    setPhase('round',savedRoundTime,'FIGHT!');
+    timerId=requestAnimationFrame(loop);
+  }
+  
+  // 完全無音のWAVデータ（0.1秒の無音）。実際の音声ファイルには一切触れずに
+  // iOS の「ユーザー操作が必要」という制限だけを解除する。
+  const SILENT_AUDIO = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
+  
+  function unlockAudio(){
+    ['audioGong','audio30sec','audio10sec'].forEach(id=>{
       const audio=$(id);
-      if(!audio) continue;
+      if(!audio) return;
       try{
-        audio.muted=true;
-        await audio.play();
-        audio.pause();
-        audio.currentTime=0;
-        audio.muted=false;
-      }catch(e){
-        audio.muted=false;
-      }
-    }
+        // 実ファイルのsrcには一切触れず、無音データだけを一瞬再生して
+        // このaudio要素を「再生許可済み」にする
+        const originalSrc = audio.getAttribute('src');
+        audio.src = SILENT_AUDIO;
+        audio.play().then(()=>{
+          audio.pause();
+          audio.currentTime = 0;
+          audio.src = originalSrc;
+        }).catch(()=>{
+          audio.src = originalSrc;
+        });
+      }catch(e){}
+    });
   }
   
   startBtn.addEventListener('click',async()=>{
-    startBtn.disabled=true;
-    await unlockAudio();
-    startBtn.disabled=false;
+    unlockAudio();
     
     totalRounds=Number(roundsSel.value);
     savedRoundTime=Number(roundTimeSel.value);
