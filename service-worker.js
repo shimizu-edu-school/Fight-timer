@@ -5,7 +5,52 @@ const CACHE_NAME = `fight-timer-${CACHE_VERSION}`;
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll([
+      return cache.addAll([const CACHE_VERSION = 'v2';
+const CACHE_NAME = `fight-timer-${CACHE_VERSION}`;
+
+self.addEventListener('install', event => {
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
+// ネットワーク優先：常に最新版を取得し、オフライン時のみキャッシュを使う
+self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
+
+  event.respondWith(
+    fetch(event.request).then(response => {
+      if (response && response.status === 200) {
+        const responseToCache = response.clone();
+        caches.open(CACHE_NAME).then(cache => {
+          cache.put(event.request, responseToCache);
+        });
+      }
+      return response;
+    }).catch(() => {
+      return caches.match(event.request);
+    })
+  );
+});
+
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
         './',
         './index.html',
         './manifest.json'
