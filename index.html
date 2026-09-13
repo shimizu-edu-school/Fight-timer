@@ -102,10 +102,6 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
   </div>
 </div>
 
-<audio id="audioGong" src="bell.mp3" preload="auto" playsinline></audio>
-<audio id="audio30sec" src="30_seconds.mp3" preload="auto" playsinline></audio>
-<audio id="audio10sec" src="10_seconds.mp3" preload="auto" playsinline></audio>
-
 <script>
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('service-worker.js').catch(()=>{});
@@ -113,6 +109,7 @@ if('serviceWorker' in navigator){
 </script>
 
 <script>
+
 (()=>{
   "use strict";
   
@@ -187,26 +184,79 @@ if('serviceWorker' in navigator){
     roundEl.textContent=`ROUND ${round}/${totalRounds}`;
   }
   
-  function playAudio(id){
+  // ===== Web Audio API による音声システム =====
+  // <audio>タグを使わず、Web Audio APIで直接再生する。
+  // これによりiOSの再生制限を「本当に音を鳴らさずに」解除でき、
+  // 再生時間の制御（3秒でカット等）も正確に行える。
+  
+  let audioCtx = null;
+  const soundBuffers = { gong: null, thirty: null, ten: null };
+  let soundsLoaded = false;
+  
+  function getAudioContext(){
+    if(!audioCtx){
+      const AC = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AC();
+    }
+    return audioCtx;
+  }
+  
+  async function loadSound(ctx, url){
+    const res = await fetch(url);
+    const arr = await res.arrayBuffer();
+    return await ctx.decodeAudioData(arr);
+  }
+  
+  async function preloadSounds(){
     try{
-      const audio=$(id);
-      if(!audio) return;
-      audio.currentTime=0;
-      audio.play().catch(()=>{});
+      const ctx = getAudioContext();
+      const [gong, thirty, ten] = await Promise.all([
+        loadSound(ctx, 'bell.mp3'),
+        loadSound(ctx, '30_seconds.mp3'),
+        loadSound(ctx, '10_seconds.mp3')
+      ]);
+      soundBuffers.gong = gong;
+      soundBuffers.thirty = thirty;
+      soundBuffers.ten = ten;
+      soundsLoaded = true;
+    }catch(e){
+      console.log('サウンド読み込み失敗:', e);
+    }
+  }
+  preloadSounds();
+  
+  function playBuffer(buffer, maxDurationSec){
+    if(!buffer || !audioCtx) return;
+    try{
+      const source = audioCtx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(audioCtx.destination);
+      source.start(0);
+      if(maxDurationSec){
+        source.stop(audioCtx.currentTime + maxDurationSec);
+      }
     }catch(e){}
   }
   
   function playGong(){
-    try{
-      const audio=$('audioGong');
-      if(!audio) return;
-      audio.currentTime=0;
-      audio.play().catch(()=>{});
-      setTimeout(()=>{
-        audio.pause();
-        audio.currentTime=0;
-      }, 3000);
-    }catch(e){}
+    playBuffer(soundBuffers.gong, 3); // 3秒でカット
+  }
+  
+  function play30sec(){
+    playBuffer(soundBuffers.thirty);
+  }
+  
+  function play10sec(){
+    playBuffer(soundBuffers.ten);
+  }
+  
+  // ユーザーの最初のタップでAudioContextを有効化する。
+  // 実際の音声は一切再生せず、「再生を許可された状態」にするだけ。
+  function unlockAudio(){
+    const ctx = getAudioContext();
+    if(ctx.state === 'suspended'){
+      ctx.resume().catch(()=>{});
+    }
   }
   
   function voiceNumber(word){
@@ -255,8 +305,8 @@ if('serviceWorker' in navigator){
     updateDisplay(seconds);
     
     if(state==='round'){
-      if(whole===30&&lastWhole>30) playAudio('audio30sec');
-      else if(whole===10&&lastWhole>10) playAudio('audio10sec');
+      if(whole===30&&lastWhole>30) play30sec();
+      else if(whole===10&&lastWhole>10) play10sec();
     }
     
     if(state==='interval'){
@@ -316,30 +366,6 @@ if('serviceWorker' in navigator){
     playGong();
     setPhase('round',savedRoundTime,'FIGHT!');
     timerId=requestAnimationFrame(loop);
-  }
-  
-  // 完全無音のWAVデータ（0.1秒の無音）。実際の音声ファイルには一切触れずに
-  // iOS の「ユーザー操作が必要」という制限だけを解除する。
-  const SILENT_AUDIO = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
-  
-  function unlockAudio(){
-    ['audioGong','audio30sec','audio10sec'].forEach(id=>{
-      const audio=$(id);
-      if(!audio) return;
-      try{
-        // 実ファイルのsrcには一切触れず、無音データだけを一瞬再生して
-        // このaudio要素を「再生許可済み」にする
-        const originalSrc = audio.getAttribute('src');
-        audio.src = SILENT_AUDIO;
-        audio.play().then(()=>{
-          audio.pause();
-          audio.currentTime = 0;
-          audio.src = originalSrc;
-        }).catch(()=>{
-          audio.src = originalSrc;
-        });
-      }catch(e){}
-    });
   }
   
   startBtn.addEventListener('click',async()=>{
