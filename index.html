@@ -317,27 +317,27 @@ if('serviceWorker' in navigator){
     }
   }
   
-  function unlockAudio(){
-    ['audioGong','audio30sec','audio10sec'].forEach(id=>{
+  async function unlockAudio(){
+    const ids=['audioGong','audio30sec','audio10sec'];
+    for(const id of ids){
       const audio=$(id);
-      if(!audio) return;
-      const originalVolume=audio.volume;
-      audio.volume=0;
-      const p=audio.play();
-      if(p && p.catch){
-        p.then(()=>{
-          audio.pause();
-          audio.currentTime=0;
-          audio.volume=originalVolume;
-        }).catch(()=>{
-          audio.volume=originalVolume;
-        });
+      if(!audio) continue;
+      try{
+        audio.muted=true;
+        await audio.play();
+        audio.pause();
+        audio.currentTime=0;
+        audio.muted=false;
+      }catch(e){
+        audio.muted=false;
       }
-    });
+    }
   }
   
   startBtn.addEventListener('click',async()=>{
-    unlockAudio();
+    startBtn.disabled=true;
+    await unlockAudio();
+    startBtn.disabled=false;
     
     totalRounds=Number(roundsSel.value);
     savedRoundTime=Number(roundTimeSel.value);
