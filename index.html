@@ -10,18 +10,6 @@
 <link rel="manifest" href="manifest.json">
 <title>FIGHT TIMER</title>
 <style>
-:root{--bg:#101010;--panel:#1b1b1b;--tex<!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#111">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="FIGHT TIMER">
-<link rel="manifest" href="manifest.json">
-<title>FIGHT TIMER</title>
-<style>
 :root{--bg:#101010;--panel:#1b1b1b;--text:#f4f4f4;--muted:#a7a7a7}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -114,9 +102,9 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
   </div>
 </div>
 
-<audio id="audioGong" src="bell.mp3"></audio>
-<audio id="audio30sec" src="30_seconds.mp3"></audio>
-<audio id="audio10sec" src="10_seconds.mp3"></audio>
+<audio id="audioGong" src="bell.mp3" preload="auto" playsinline></audio>
+<audio id="audio30sec" src="30_seconds.mp3" preload="auto" playsinline></audio>
+<audio id="audio10sec" src="10_seconds.mp3" preload="auto" playsinline></audio>
 
 <script>
 if('serviceWorker' in navigator){
@@ -329,357 +317,23 @@ if('serviceWorker' in navigator){
     }
   }
   
-  startBtn.addEventListener('click',async()=>{
-    totalRounds=Number(roundsSel.value);
-    savedRoundTime=Number(roundTimeSel.value);
-    savedInterval=Number(intervalSel.value);
-    savedIdle=Number(idleSel.value);
-    
-    round=1;
-    state='ready';
-    lastWhole=-1;
-    
-    settingsScreen.classList.remove('active');
-    timerScreen.classList.add('active');
-    
-    await enableWakeLock();
-    
-    if(savedIdle>0){
-      setPhase('idle',savedIdle,'開始まで');
-      timerId=requestAnimationFrame(loop);
-    }else{
-      state='idle';
-      advance();
-    }
-  });
-  
-  stopBtn.addEventListener('click',()=>{
-    stopTimer();
-    state='ready';
-    phaseEl.textContent='FINISHED';
-    roundEl.textContent=`ROUND ${totalRounds}/${totalRounds}`;
-    timeEl.textContent='00:00';
-    hintEl.textContent='中止しました';
-    displayArea.classList.remove('state-idle','state-round','state-interval');
-    displayArea.classList.add('state-finished');
-  });
-  
-  resetBtn.addEventListener('click',()=>{
-    stopTimer();
-    state='ready';
-    round=1;
-    phaseEl.textContent='READY';
-    roundEl.textContent=`ROUND 1/${totalRounds}`;
-    updateDisplay(savedRoundTime);
-    hintEl.textContent='';
-    displayArea.classList.remove('state-idle','state-round','state-interval','state-finished');
-    
-    timerScreen.classList.remove('active');
-    settingsScreen.classList.add('active');
-  });
-  
-  initSelects();
-  updateDisplay(Number(roundTimeSel.value));
-})();
-</script>
-</body>
-</html>
-t:#f4f4f4;--muted:#a7a7a7}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
-
-.screen{display:none;width:100%;height:100%;flex-direction:column;overflow:hidden}
-.screen.active{display:flex}
-
-#settingsScreen{justify-content:flex-start;padding:20px}
-#timerScreen{justify-content:center;align-items:center;padding:20px}
-
-.app-title{text-align:center;margin:40px 0 40px;font-size:28px;font-weight:900;letter-spacing:.1em}
-
-.settings-form{width:100%;max-width:600px;margin:0 auto}
-.form-group{margin-bottom:20px}
-.form-label{display:block;font-size:13px;font-weight:700;margin-bottom:8px;color:#ddd}
-.form-select{width:100%;padding:14px;background:#090909;color:white;border:1px solid #444;border-radius:10px;font-size:16px}
-
-.start-btn-container{width:100%;max-width:600px;margin:auto;margin-top:40px}
-.start-btn{width:100%;padding:18px;background:#e8e8e8;color:#111;font-size:18px;font-weight:900;border:0;border-radius:12px;cursor:pointer}
-
-.timer-display-area{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;width:100%;transition:background-color .3s ease}
-
-.timer-display-area.state-idle{background:linear-gradient(135deg,#ff9500 0%,#ff6b00 100%)}
-.timer-display-area.state-round{background:linear-gradient(135deg,#ff3b30 0%,#cc2300 100%)}
-.timer-display-area.state-interval{background:linear-gradient(135deg,#00a8e8 0%,#0080b0 100%)}
-.timer-display-area.state-finished{background:linear-gradient(135deg,#5a5a5a 0%,#3a3a3a 100%)}
-
-.timer-phase{font-size:18px;font-weight:800;color:#ffffff;margin-bottom:10px}
-.timer-round{font-size:32px;font-weight:900;color:#ffffff;margin-bottom:20px}
-.timer-time{font-size:clamp(80px,25vw,150px);font-weight:900;color:#ffffff;line-height:1;text-shadow:0 4px 12px rgba(0,0,0,.3);margin:20px 0}
-.timer-hint{font-size:16px;color:rgba(255,255,255,.8);min-height:24px}
-
-.timer-controls{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:30px;padding:0 10px}
-.timer-btn{padding:16px;border:0;border-radius:12px;font-size:16px;font-weight:900;cursor:pointer;background:rgba(255,255,255,.2);color:white}
-.timer-btn:active{background:rgba(255,255,255,.4)}
-
-.timer-status{font-size:12px;color:rgba(255,255,255,.7);margin-top:10px}
-</style>
-</head>
-<body>
-
-<div id="settingsScreen" class="screen active">
-  <div class="app-title">FIGHT TIMER</div>
-  
-  <div class="settings-form">
-    <div class="form-group">
-      <label class="form-label">ラウンド数</label>
-      <select id="rounds" class="form-select">
-        <option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option>
-        <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
-        <option>11</option><option>12</option><option>13</option><option>14</option><option>15</option>
-        <option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
-      </select>
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">1ラウンド時間</label>
-      <select id="roundTime" class="form-select"></select>
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">インターバル</label>
-      <select id="interval" class="form-select"></select>
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">開始前アイドル</label>
-      <select id="idle" class="form-select"></select>
-    </div>
-  </div>
-  
-  <div class="start-btn-container">
-    <button id="startBtn" class="start-btn">START</button>
-  </div>
-</div>
-
-<div id="timerScreen" class="screen">
-  <div class="timer-display-area">
-    <div class="timer-phase" id="phase">READY</div>
-    <div class="timer-round" id="round">ROUND 1/3</div>
-    <div class="timer-time" id="time">01:00</div>
-    <div class="timer-hint" id="hint">準備中</div>
-    
-    <div class="timer-controls">
-      <button id="stopBtn" class="timer-btn">STOP</button>
-      <button id="resetBtn" class="timer-btn">RESET</button>
-    </div>
-    
-    <div class="timer-status" id="status">準備中</div>
-  </div>
-</div>
-
-<audio id="audioGong" src="bell.mp3"></audio>
-<audio id="audio30sec" src="30_seconds.mp3"></audio>
-<audio id="audio10sec" src="10_seconds.mp3"></audio>
-
-<script>
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('service-worker.js').catch(()=>{});
-}
-</script>
-
-<script>
-(()=>{
-  "use strict";
-  
-  const $=id=>document.getElementById(id);
-  
-  const settingsScreen=$('settingsScreen');
-  const timerScreen=$('timerScreen');
-  
-  const roundsSel=$('rounds');
-  const roundTimeSel=$('roundTime');
-  const intervalSel=$('interval');
-  const idleSel=$('idle');
-  const startBtn=$('startBtn');
-  
-  const phaseEl=$('phase');
-  const roundEl=$('round');
-  const timeEl=$('time');
-  const hintEl=$('hint');
-  const statusEl=$('status');
-  const stopBtn=$('stopBtn');
-  const resetBtn=$('resetBtn');
-  const displayArea=document.querySelector('.timer-display-area');
-  
-  let timerId=null;
-  let endAt=0;
-  let state='ready';
-  let round=1;
-  let totalRounds=3;
-  let wakeLock=null;
-  let lastWhole=-1;
-  
-  let savedRoundTime=180;
-  let savedInterval=60;
-  let savedIdle=10;
-  
-  function initSelects(){
-    roundTimeSel.innerHTML='';
-    for(let m=1;m<=10;m++){
-      const o=document.createElement('option');
-      o.value=m*60;
-      o.textContent=m+'分';
-      roundTimeSel.appendChild(o);
-    }
-    roundTimeSel.value='180';
-    
-    intervalSel.innerHTML='';
-    for(let s=0;s<=60;s+=5){
-      const o=document.createElement('option');
-      o.value=s;
-      o.textContent=s+'秒';
-      intervalSel.appendChild(o);
-    }
-    intervalSel.value='60';
-    
-    idleSel.innerHTML='';
-    for(let s=0;s<=30;s+=5){
-      const o=document.createElement('option');
-      o.value=s;
-      o.textContent=s+'秒';
-      idleSel.appendChild(o);
-    }
-    idleSel.value='10';
-  }
-  
-  function fmt(sec){
-    sec=Math.max(0,Math.ceil(sec));
-    return String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');
-  }
-  
-  function updateDisplay(sec){
-    timeEl.textContent=fmt(sec);
-    roundEl.textContent=`ROUND ${round}/${totalRounds}`;
-  }
-  
-  function playAudio(id){
-    try{
+  function unlockAudio(){
+    ['audioGong','audio30sec','audio10sec'].forEach(id=>{
       const audio=$(id);
       if(!audio) return;
-      audio.currentTime=0;
-      audio.play().catch(()=>{});
-    }catch(e){}
-  }
-  
-  function voiceNumber(word){
-    if('speechSynthesis' in window){
-      try{
-        window.speechSynthesis.cancel();
-        const u=new SpeechSynthesisUtterance(word);
-        u.lang='en-US';
-        u.rate=0.9;
-        window.speechSynthesis.speak(u);
-      }catch(e){}
-    }
-  }
-  
-  async function enableWakeLock(){
-    if(!('wakeLock' in navigator)) return;
-    try{
-      if(wakeLock) await wakeLock.release().catch(()=>{});
-      wakeLock=await navigator.wakeLock.request('screen');
-    }catch(e){}
-  }
-  
-  function setPhase(next,seconds,message=''){
-    state=next;
-    endAt=performance.now()+seconds*1000;
-    lastWhole=Math.ceil(seconds);
-    
-    phaseEl.textContent=next==='idle'?'GET READY':next==='round'?'ROUND':next==='interval'?'INTERVAL':'READY';
-    hintEl.textContent=message;
-    updateDisplay(seconds);
-    
-    displayArea.classList.remove('state-idle','state-round','state-interval','state-finished');
-    if(next==='idle') displayArea.classList.add('state-idle');
-    else if(next==='round') displayArea.classList.add('state-round');
-    else if(next==='interval') displayArea.classList.add('state-interval');
-  }
-  
-  function stopTimer(){
-    if(timerId!==null) cancelAnimationFrame(timerId);
-    timerId=null;
-  }
-  
-  function loop(){
-    const seconds=Math.max(0,(endAt-performance.now())/1000);
-    const whole=Math.ceil(seconds);
-    updateDisplay(seconds);
-    
-    if(state==='round'){
-      if(whole===30&&lastWhole>30) playAudio('audio30sec');
-      else if(whole===10&&lastWhole>10) playAudio('audio10sec');
-    }
-    
-    if(state==='interval'){
-      if(whole===5&&lastWhole>5){ hintEl.textContent='FIVE'; voiceNumber('five'); }
-      else if(whole===4&&lastWhole>4){ hintEl.textContent='FOUR'; voiceNumber('four'); }
-      else if(whole===3&&lastWhole>3){ hintEl.textContent='THREE'; voiceNumber('three'); }
-      else if(whole===2&&lastWhole>2){ hintEl.textContent='TWO'; voiceNumber('two'); }
-      else if(whole===1&&lastWhole>1){ hintEl.textContent='ONE'; voiceNumber('one'); }
-    }
-    
-    lastWhole=whole;
-    if(seconds<=0){
-      advance();
-      return;
-    }
-    timerId=requestAnimationFrame(loop);
-  }
-  
-  function advance(){
-    stopTimer();
-    
-    if(state==='idle'){
-      playAudio('audioGong');
-      setPhase('round',savedRoundTime,'FIGHT!');
-      timerId=requestAnimationFrame(loop);
-      return;
-    }
-    
-    if(state==='round'){
-      playAudio('audioGong');
-      if(round>=totalRounds){
-        state='ready';
-        phaseEl.textContent='FINISHED';
-        roundEl.textContent=`ROUND ${totalRounds}/${totalRounds}`;
-        timeEl.textContent='00:00';
-        hintEl.textContent='お疲れさまでした';
-        displayArea.classList.remove('state-idle','state-round','state-interval');
-        displayArea.classList.add('state-finished');
-        if(wakeLock){ wakeLock.release().catch(()=>{}); wakeLock=null; }
-        return;
+      const p=audio.play();
+      if(p && p.catch){
+        p.then(()=>{
+          audio.pause();
+          audio.currentTime=0;
+        }).catch(()=>{});
       }
-      if(savedInterval<=0){
-        round++;
-        playAudio('audioGong');
-        setPhase('round',savedRoundTime,'FIGHT!');
-        timerId=requestAnimationFrame(loop);
-      }else{
-        setPhase('interval',savedInterval,'');
-        timerId=requestAnimationFrame(loop);
-      }
-      return;
-    }
-    
-    if(state==='interval'){
-      round++;
-      if(round===totalRounds) playAudio('audioGong');
-      setPhase('round',savedRoundTime,'FIGHT!');
-      timerId=requestAnimationFrame(loop);
-    }
+    });
   }
   
   startBtn.addEventListener('click',async()=>{
+    unlockAudio();
+    
     totalRounds=Number(roundsSel.value);
     savedRoundTime=Number(roundTimeSel.value);
     savedInterval=Number(intervalSel.value);
