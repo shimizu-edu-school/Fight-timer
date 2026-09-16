@@ -145,6 +145,10 @@ if('serviceWorker' in navigator){
   let savedInterval=60;
   let savedIdle=10;
   
+  let isPaused=false;
+  let pausedRemaining=0;
+  let pausedHint='';
+  
   function initSelects(){
     roundTimeSel.innerHTML='';
     for(let m=1;m<=10;m++){
@@ -371,6 +375,10 @@ if('serviceWorker' in navigator){
   startBtn.addEventListener('click',async()=>{
     unlockAudio();
     
+    isPaused=false;
+    pausedRemaining=0;
+    stopBtn.textContent='STOP';
+    
     totalRounds=Number(roundsSel.value);
     savedRoundTime=Number(roundTimeSel.value);
     savedInterval=Number(intervalSel.value);
@@ -395,20 +403,34 @@ if('serviceWorker' in navigator){
   });
   
   stopBtn.addEventListener('click',()=>{
-    stopTimer();
-    state='ready';
-    phaseEl.textContent='FINISHED';
-    roundEl.textContent=`ROUND ${totalRounds}/${totalRounds}`;
-    timeEl.textContent='00:00';
-    hintEl.textContent='中止しました';
-    displayArea.classList.remove('state-idle','state-round','state-interval');
-    displayArea.classList.add('state-finished');
+    if(!isPaused){
+      // 一時停止：現在の残り時間を保存して止める
+      pausedRemaining=Math.max(0,(endAt-performance.now())/1000);
+      pausedHint=hintEl.textContent;
+      stopTimer();
+      isPaused=true;
+      stopBtn.textContent='START';
+      hintEl.textContent='一時停止中';
+      if(wakeLock){ wakeLock.release().catch(()=>{}); wakeLock=null; }
+    }else{
+      // 再開：保存していた残り時間から続きを開始
+      endAt=performance.now()+pausedRemaining*1000;
+      lastWhole=Math.ceil(pausedRemaining);
+      isPaused=false;
+      stopBtn.textContent='STOP';
+      hintEl.textContent=pausedHint;
+      enableWakeLock();
+      timerId=requestAnimationFrame(loop);
+    }
   });
   
   resetBtn.addEventListener('click',()=>{
     stopTimer();
     state='ready';
     round=1;
+    isPaused=false;
+    pausedRemaining=0;
+    stopBtn.textContent='STOP';
     phaseEl.textContent='READY';
     roundEl.textContent=`ROUND 1/${totalRounds}`;
     updateDisplay(savedRoundTime);
